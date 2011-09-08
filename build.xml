@@ -1,0 +1,32 @@
+<project name="MySmus" basedir=".">
+    
+    <property name="out.dir" value="public" />
+    <property name="src.dir" value="src" />
+    <property name="deploy.local.dir" value="/var/www/mysmus" />
+    
+    <target name="-concat">
+        <concat destfile="${out.dir}/mysmus.js">
+            <header filtering="no" trimleading="yes">
+                var MySmus = {};
+                (function(exports) {
+            </header>
+            <fileset dir="${src.dir}" includes="*.js" />
+            <footer filtering="no" trimleading="yes">
+                })(MySmus);
+            </footer>
+        </concat>
+    </target>
+    
+    <target name="-deploy-local:clean">
+        <delete dir="${deploy.local.dir}" />
+    </target>
+    
+    <target name="deploy-local" depends="-deploy-local:clean,-concat">
+        <mkdir dir="${deploy.local.dir}" />
+        <copy todir="${deploy.local.dir}">
+            <fileset dir="${out.dir}" />
+        </copy>
+        <echo message="http://localhost/mysmus" />
+    </target>
+    
+</project>

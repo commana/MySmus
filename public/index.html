@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <title>MySmus</title>
+    </head>
+    
+    <body>
+    <h1>MySmus</h1>
+    <canvas id="view" width="640" height="480" style="border: 1px dotted;"></canvas>
+    <div>
+        <input type="button" id="restart" value="Restart" onclick="restart()" />
+    </div>
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script src="mysmus.js"></script>
+    <script type="text/javascript">
+        var timer;
+        var view = document.getElementById("view");
+        
+        function restart() {
+            if (timer) window.clearInterval(timer);
+            timer = MySmus.gameLoop(view);
+        }
+        
+        $(document).ready(function() {
+            restart();
+            
+            view.addEventListener('click', function(event) {
+                var p = $(view).offset();
+                
+                var x = event.pageX - p.left;
+                var y = event.pageY - p.top;
+                
+                MySmus.input(x, y);
+            });
+        });
+    </script>
+    </body>
+</html>
