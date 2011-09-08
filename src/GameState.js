@@ -75,7 +75,10 @@ GameState.prototype.isWinningPossible = function(player, blobs) {
     var smallerBlobs = blobs.filter(function(b) {
         return b !== player && player.mass() >= b.mass();
     });
-    return smallerBlobs.mass() >= biggerBlobs.mass();
+    var smallerMass = smallerBlobs.mass();
+    return biggerBlobs.length === 0 || biggerBlobs.some(function(b) {
+        return smallerMass + player.mass() > b.mass();
+    });
 }
 
 GameState.prototype.lose = function(blobs) {

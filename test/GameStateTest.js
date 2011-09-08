@@ -104,6 +104,18 @@ GameStateTest.prototype.testShouldGoInLosingStateWinningNotPossible = function()
     assertInstanceOf(LosingGameState, newWorld);
 }
 
+GameStateTest.prototype.testShouldNotGoInLosingStateIfWinningIsPossible = function() {
+    var player = new PlayerBlob(1, P(), V(), 9);
+    var blob1  = new Blob(P(15, 0), V(), 8);
+    var blob2  = new Blob(P(30, 0), V(), 10);
+    var blob3  = new Blob(P(45, 0), V(), 11);
+    
+    var oldWorld = new GameState([player, blob1, blob2, blob3], this.bounds, new SpyCollision());
+    var newWorld = oldWorld.advance(this.inputHandler, new GameTime(1, 1));
+    
+    assertNotInstanceOf(LosingGameState, newWorld);
+}
+
 var SpyBlob = function() {
     this.state = {};
 }
