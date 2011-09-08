@@ -34,7 +34,9 @@
     <target name="deploy-local" depends="-deploy-local:clean,compile">
         <mkdir dir="${deploy.local.dir}" />
         <copy todir="${deploy.local.dir}">
-            <fileset dir="${out.dir}" />
+            <fileset dir="${out.dir}" >
+                <exclude name=".gitignore" />
+            </fileset>
         </copy>
         <echo message="http://localhost/mysmus" />
     </target>
