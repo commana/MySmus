@@ -27,7 +27,7 @@ exports.gameLoop = function(canvas) {
         new PlayerBlob(1, new Position(100, 100), new Velocity(0, 5), 35),
         new Blob(new Position(300, 230), new Velocity(5, 0), 40),
         new Blob(new Position(300, 100), new Velocity(0, 5), 10),
-        new Blob(new Position(540, 200), new Velocity(5, 0), 40),
+        new Blob(new Position(540, 200), new Velocity(5, 0), 40)
     ];
     var bounds = new BouncyBounds(0, 0, 640, 480);
     var world  = new GameState(blobs, bounds, new MassTransformationCollision());
