@@ -3,11 +3,11 @@
     <property name="out.dir" value="public" />
     <property name="src.dir" value="src" />
     <property name="lib.dir" value="lib" />
-    <property name="out.file" value="mysmus.js" />
+    <property name="out.file" value="${out.dir}/mysmus.js" />
     <property name="deploy.local.dir" value="/var/www/mysmus" />
     
     <target name="-concat">
-        <concat destfile="${out.dir}/${out.file}">
+        <concat destfile="${out.file}">
             <header filtering="no" trimleading="yes">
                 var MySmus = {};
                 (function(exports) {
@@ -22,9 +22,9 @@
     <target name="-compile" depends="-concat">
         <property name="compiled.file" value="${out.dir}/mysmus-compiled.js" />
         <java jar="${lib.dir}/compiler.jar" fork="true" failonerror="true">
-            <arg line="--js ${out.dir}/${out.file} --js_output_file ${compiled.file}" />
+            <arg line="--js ${out.file} --js_output_file ${compiled.file}" />
         </java>
-        <move file="${compiled.file}" tofile="${out.dir}/${out.file}" />
+        <move file="${compiled.file}" tofile="${out.file}" />
     </target>
     
     <target name="-deploy-local:clean">
