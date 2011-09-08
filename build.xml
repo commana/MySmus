@@ -19,7 +19,7 @@
         </concat>
     </target>
     
-    <target name="-compile" depends="-concat">
+    <target name="compile" depends="-concat">
         <property name="compiled.file" value="${out.dir}/mysmus-compiled.js" />
         <java jar="${lib.dir}/compiler.jar" fork="true" failonerror="true">
             <arg line="--js ${out.file} --js_output_file ${compiled.file}" />
@@ -31,7 +31,7 @@
         <delete dir="${deploy.local.dir}" />
     </target>
     
-    <target name="deploy-local" depends="-deploy-local:clean,-compile">
+    <target name="deploy-local" depends="-deploy-local:clean,compile">
         <mkdir dir="${deploy.local.dir}" />
         <copy todir="${deploy.local.dir}">
             <fileset dir="${out.dir}" />
