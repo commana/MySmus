@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Christoph Thelen
+ * Copyright 2011, 2012 Christoph Thelen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,10 @@
  */
 
 var Position = function(x, y) {
-    this.x = x;
-    this.y = y;
+    Vector.call(this, x, y);
 }
+
+Position.prototype = new Vector();
 
 Position.prototype.applyVelocity = function(velocity, gametime) {
     return new Position(
