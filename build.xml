@@ -1,4 +1,4 @@
-<project name="MySmus" basedir=".">
+<project name="MySmus" basedir="." default="compile">
     
     <property name="out.dir" value="public" />
     <property name="src.dir" value="src" />
@@ -19,7 +19,7 @@
         </concat>
     </target>
     
-    <target name="compile" depends="-concat">
+    <target name="compile" depends="-concat" unless="no-compile">
         <property name="compiled.file" value="${out.dir}/mysmus-compiled.js" />
         <java jar="${lib.dir}/compiler.jar" fork="true" failonerror="true">
             <arg line="--js ${out.file} --js_output_file ${compiled.file}" />
