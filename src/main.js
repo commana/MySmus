@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Christoph Thelen
+ * Copyright 2011, 2012 Christoph Thelen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ exports.gameLoop = function(canvas) {
         new Blob(new Position(540, 200), new Velocity(5, 0), 40)
     ];
     var bounds = new BouncyBounds(0, 0, 640, 480);
-    var world  = new GameState(blobs, bounds, new MassTransformationCollision());
+    var world  = new Game(blobs, bounds, new MassTransformationCollision(), new GameState());
     
     return setInterval(function() {
         var input = new InputHandler(InputQueue.slice());

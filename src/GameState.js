@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Christoph Thelen
+ * Copyright 2011, 2012 Christoph Thelen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,42 +14,22 @@
  * limitations under the License.
  */
 
-var GameState = function(blobs, bounds, collision) {
-    this.blobs     = blobs;
-    this.bounds    = bounds;
-    this.collision = collision;
-};
+function GameState() {};
 
-GameState.prototype.advance = function(input, gametime) {
-    var blobs = input.process(this.blobs);
-    
-    var movedBlobs = [];
-    for (var i = 0; i < blobs.length; i++) {
-        var blob = blobs[i];
-        movedBlobs.push(blob.moveInside(this.bounds, gametime));
-    }
-    
-    var blobsAfterCollisions = this.collision.perform(movedBlobs).filter(function(b) {
-        return b.mass() > 0;
-    });
-    
-    return this.transitionState(blobsAfterCollisions);
-}
-
-GameState.prototype.transitionState = function(blobs) {
+GameState.prototype.transition = function(blobs) {
     if (blobs.length === 0) {
-        return this.lose([]);
+        return this.lose();
     }
     var playerBlobs = blobs.filter(function(b) {
         return b.player > 0;
     });
     if (playerBlobs.length === 0) {
-        return this.lose(blobs);
+        return this.lose();
     }
     // For now, we assume only one player...
     var playerBlob = playerBlobs.shift();
     if (!this.isWinningPossible(playerBlob, blobs)) {
-        return this.lose(blobs);
+        return this.lose();
     }
     
     var biggestBlob = blobs.reduce(function(a, b) {
@@ -59,13 +39,13 @@ GameState.prototype.transitionState = function(blobs) {
     
     if (biggestBlob.mass() > totalMass/2) {
         if (biggestBlob instanceof Object(PlayerBlob)) {
-            return this.win(blobs);
+            return this.win();
         } else {
-            return this.lose(blobs);
+            return this.lose();
         }
     }
     
-    return new GameState(blobs, this.bounds, this.collision);
+    return this;
 }
 
 GameState.prototype.isWinningPossible = function(player, blobs) {
@@ -81,12 +61,12 @@ GameState.prototype.isWinningPossible = function(player, blobs) {
     });
 }
 
-GameState.prototype.lose = function(blobs) {
-    return new LosingGameState(blobs, this.bounds, this.collision);
+GameState.prototype.lose = function() {
+    return new LosingGameState();
 }
 
-GameState.prototype.win = function(blobs) {
-    return new WinningGameState(blobs, this.bounds, this.collision);
+GameState.prototype.win = function() {
+    return new WinningGameState();
 }
 
 GameState.prototype.status = function() {

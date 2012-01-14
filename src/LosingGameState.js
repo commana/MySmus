@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Christoph Thelen
+ * Copyright 2011, 2012 Christoph Thelen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-var LosingGameState = function(blobs, bounds, collision) {
-    GameState.call(this, blobs, bounds, collision);
+var LosingGameState = function() {
+    GameState.call(this);
 }
 
 LosingGameState.prototype = new GameState();
 
-LosingGameState.prototype.advance = function(input, gametime) {
+LosingGameState.prototype.transition = function(blobs) {
     return this;
 }
 
