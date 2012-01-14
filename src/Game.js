@@ -22,6 +22,10 @@ var Game = function(blobs, bounds, collision, state) {
 };
 
 Game.prototype.advance = function(input, gametime) {
+    if (!this.state.isRunning()) {
+        return this;
+    }
+    
     var blobs = input.process(this.blobs);
     
     var movedBlobs = [];

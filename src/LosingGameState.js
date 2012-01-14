@@ -27,3 +27,7 @@ LosingGameState.prototype.transition = function(blobs) {
 LosingGameState.prototype.status = function() {
     return "Lost!";
 }
+
+LosingGameState.prototype.isRunning = function() {
+    return false;
+}

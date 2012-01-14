@@ -27,3 +27,7 @@ WinningGameState.prototype.transition = function(blobs) {
 WinningGameState.prototype.status = function() {
     return "Won!";
 }
+
+WinningGameState.prototype.isRunning = function() {
+    return false;
+}

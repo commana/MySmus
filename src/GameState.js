@@ -72,3 +72,7 @@ GameState.prototype.win = function() {
 GameState.prototype.status = function() {
     return "Running...";
 }
+
+GameState.prototype.isRunning = function() {
+    return true;
+}

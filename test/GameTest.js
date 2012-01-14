@@ -26,7 +26,7 @@ GameTest.prototype.testShouldReturnNewBlobs = function() {
     var blob2 = new SpyBlob();
     
     var spyCollision = new SpyCollision();
-    var oldWorld = new Game([blob1, blob2], null, spyCollision, new NullGameState);
+    var oldWorld = new Game([blob1, blob2], null, spyCollision, new StubGameState);
     var newWorld = oldWorld.advance(this.inputHandler);
     
     assertEquals([blob1.state, blob2.state], newWorld.blobs);
@@ -37,7 +37,7 @@ GameTest.prototype.testShouldInitiateCollisionCheck = function() {
     var blob2 = new Blob(P(), V(), 0);
     
     var spyCollision = new SpyCollision();
-    var oldWorld = new Game([blob1, blob2], this.bounds, spyCollision, new NullGameState);
+    var oldWorld = new Game([blob1, blob2], this.bounds, spyCollision, new StubGameState);
     oldWorld.advance(this.inputHandler, new GameTime(1, 1));
     
     assertTrue(spyCollision.called);
@@ -47,7 +47,7 @@ GameTest.prototype.testShouldRemoveMasslessBlobs = function() {
     var blob1 = new Blob(P(), V(), 0);
     var blob2 = new Blob(P(), V(), 0);
     
-    var oldWorld = new Game([blob1, blob2], this.bounds, new SpyCollision(), new NullGameState);
+    var oldWorld = new Game([blob1, blob2], this.bounds, new SpyCollision(), new StubGameState);
     var newWorld = oldWorld.advance(this.inputHandler, new GameTime(1, 1));
     
     assertEquals([], newWorld.blobs);
@@ -59,6 +59,15 @@ GameTest.prototype.testShouldTransitionState = function() {
     world.advance(this.inputHandler, new GameTime(1, 1));
     
     assertTrue(spyGameState.called);
+}
+
+GameTest.prototype.testShouldStopPlayingIfGameIsNotInRunningState = function() {
+    var spyCollision = new SpyCollision();
+    var stubGameState = new StubGameState(false);
+    var world = new Game([], this.bounds, spyCollision, stubGameState);
+    world.advance(this.inputHandler, new GameTime(1, 1));
+    
+    assertFalse(spyCollision.called);
 }
 
 var SpyBlob = function() {
@@ -79,11 +88,13 @@ SpyCollision.prototype.perform = function(blobs) {
     return blobs;
 }
 
-var NullGameState = function() {
-    this.transition = function (blobs) { return this; };
-}
-
 var SpyGameState = function() {
     this.called = false;
+    this.isRunning = function () { return true; }
     this.transition = function (blobs) { this.called = true; return this; };
+}
+
+var StubGameState = function(running) {
+    this.isRunning = function () { return typeof running === "undefined" ? true : false; }
+    this.transition = function (blobs) { return this; }
 }
