@@ -14,73 +14,77 @@
  * limitations under the License.
  */
 
-var GameStateTest = TestCase("GameStateTest");
+var RunningGameStateTest = TestCase("RunningGameStateTest");
 
-GameStateTest.prototype.setUp = function() {
-    this.inputHandler = {process: function(a) {return a; }};
-    this.bounds = new AlwaysInsideBounds();
+RunningGameStateTest.prototype.setUp = function() {
+    
 }
 
-GameStateTest.prototype.testShouldGoInLosingStateIfNoPlayerBlobPresent = function() {
-    var nextState = new GameState().transition([new Blob, new Blob]);
+RunningGameStateTest.prototype.testShouldGoInLosingStateIfNoPlayerBlobPresent = function() {
+    var nextState = new RunningGameState(new StubGame([new Blob, new Blob])).handle();
     
     assertInstanceOf(LosingGameState, nextState);
 }
 
-GameStateTest.prototype.testShouldGoInLosingStateIfNonPlayerBlobIsTooBig = function() {
+RunningGameStateTest.prototype.testShouldGoInLosingStateIfNonPlayerBlobIsTooBig = function() {
     var player = new PlayerBlob(1, null, null, 1);
     var big    = new Blob(null, null, 2);
     var tooBig = new Blob(null, null, 4);
     
-    var nextState = new GameState().transition([player, big, tooBig]);
+    var nextState = new RunningGameState(new StubGame([player, big, tooBig])).handle();
     
     assertInstanceOf(LosingGameState, nextState);
 }
 
-GameStateTest.prototype.testShouldGoInWinningStateIfPlayerIsTooBig = function() {
+RunningGameStateTest.prototype.testShouldGoInWinningStateIfPlayerIsTooBig = function() {
     var player  = new PlayerBlob(1, null, null, 4);
     var small   = new Blob(null, null, 2);
     var smaller = new Blob(null, null, 1);
     
-    var nextState = new GameState().transition([player, small, smaller]);
+    var nextState = new RunningGameState(new StubGame([player, small, smaller])).handle();
     
     assertInstanceOf(WinningGameState, nextState);
 }
 
-GameStateTest.prototype.testShouldDefaultToLosingStateIfNoBlobs = function() {
-    var nextState = new GameState().transition([])
+RunningGameStateTest.prototype.testShouldDefaultToLosingStateIfNoBlobs = function() {
+    var nextState = new RunningGameState(new StubGame([])).handle()
     
     assertInstanceOf(LosingGameState, nextState);
 }
 
-GameStateTest.prototype.testShouldGoInLosingStateWinningNotPossible = function() {
+RunningGameStateTest.prototype.testShouldGoInLosingStateWinningNotPossible = function() {
     var player  = new PlayerBlob(1, null, null, 9);
     var small   = new Blob(null, null, 1);
     var tooBig1 = new Blob(null, null, 10);
     var tooBig2 = new Blob(null, null, 11);
     
-    var nextState = new GameState().transition([player, small, tooBig1, tooBig2]);
+    var nextState = new RunningGameState(new StubGame([player, small, tooBig1, tooBig2])).handle();
     
     assertInstanceOf(LosingGameState, nextState);
 }
 
-GameStateTest.prototype.testShouldNotGoInLosingStateIfWinningIsPossible = function() {
+RunningGameStateTest.prototype.testShouldNotGoInLosingStateIfWinningIsPossible = function() {
     var player = new PlayerBlob(1, null, null, 9);
     var blob1  = new Blob(null, null, 8);
     var blob2  = new Blob(null, null, 10);
     var blob3  = new Blob(null, null, 11);
     
-    var nextState = new GameState().transition([player, blob1, blob2, blob3]);
+    var nextState = new RunningGameState(new StubGame([player, blob1, blob2, blob3])).handle();
     
     assertNotInstanceOf(LosingGameState, nextState);
 }
 
-GameStateTest.prototype.testShouldKeepRunningStateOnDefault = function() {
+RunningGameStateTest.prototype.testShouldKeepRunningStateOnDefault = function() {
     var player = new PlayerBlob(1);
     
-    var nextState = new GameState().transition([player, new Blob, new Blob]);
+    var nextState = new RunningGameState(new StubGame([player, new Blob, new Blob])).handle();
     
     assertNotInstanceOf(LosingGameState, nextState);
     assertNotInstanceOf(WinningGameState, nextState);
+}
+
+var StubGame = function(blobs) {
+    this.blobs = blobs;
+    this.advance = function (input, gametime) { return this; };
 }
 

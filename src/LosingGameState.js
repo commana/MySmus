@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-var LosingGameState = function() {
-    GameState.call(this);
+var LosingGameState = function(game) {
+    GameState.call(this, game);
 }
 
 LosingGameState.prototype = new GameState();
 
-LosingGameState.prototype.transition = function(blobs) {
+LosingGameState.prototype.handle = function(input, gametime) {
     return this;
 }
 
@@ -28,6 +28,3 @@ LosingGameState.prototype.status = function() {
     return "Lost!";
 }
 
-LosingGameState.prototype.isRunning = function() {
-    return false;
-}

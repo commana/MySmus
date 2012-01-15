@@ -30,12 +30,12 @@ exports.gameLoop = function(canvas) {
         new Blob(new Position(540, 200), new Velocity(5, 0), 40)
     ];
     var bounds = new BouncyBounds(0, 0, 640, 480);
-    var world  = new Game(blobs, bounds, new MassTransformationCollision(), new GameState());
+    var world  = new RunningGameState(new Game(blobs, bounds, new MassTransformationCollision()));
     
     return setInterval(function() {
         var input = new InputHandler(InputQueue.slice());
         InputQueue = [];
-        world = world.advance(input, gametime);
+        world = world.handle(input, gametime);
         draw(world, canvas);
     }, 1000/fps);
 }
@@ -56,8 +56,8 @@ function draw(world, canvas) {
     ctx.textBaseline = "top";
     ctx.fillText(world.status(), 0, 0);
     
-    for (var i = 0; i < world.blobs.length; i++) {
-        var blob = world.blobs[i];
+    for (var i = 0; i < world.game.blobs.length; i++) {
+        var blob = world.game.blobs[i];
         
         ctx.beginPath();
         ctx.arc(blob.position.x, blob.position.y, blob.radius, 0, Math.PI*2, false);

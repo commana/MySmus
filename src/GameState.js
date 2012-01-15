@@ -14,65 +14,11 @@
  * limitations under the License.
  */
 
-function GameState() {};
-
-GameState.prototype.transition = function(blobs) {
-    if (blobs.length === 0) {
-        return this.lose();
-    }
-    var playerBlobs = blobs.filter(function(b) {
-        return b.player > 0;
-    });
-    if (playerBlobs.length === 0) {
-        return this.lose();
-    }
-    // For now, we assume only one player...
-    var playerBlob = playerBlobs.shift();
-    if (!this.isWinningPossible(playerBlob, blobs)) {
-        return this.lose();
-    }
-    
-    var biggestBlob = blobs.reduce(function(a, b) {
-        return a.mass() > b.mass() ? a : b;
-    });
-    var totalMass = blobs.mass();
-    
-    if (biggestBlob.mass() > totalMass/2) {
-        if (biggestBlob instanceof Object(PlayerBlob)) {
-            return this.win();
-        } else {
-            return this.lose();
-        }
-    }
-    
-    return this;
+function GameState(game) {
+    this.game = game;
 }
 
-GameState.prototype.isWinningPossible = function(player, blobs) {
-    var biggerBlobs = blobs.filter(function(b) {
-        return b !== player && player.mass() < b.mass();
-    });
-    var smallerBlobs = blobs.filter(function(b) {
-        return b !== player && player.mass() >= b.mass();
-    });
-    var smallerMass = smallerBlobs.mass();
-    return biggerBlobs.length === 0 || biggerBlobs.some(function(b) {
-        return smallerMass + player.mass() > b.mass();
-    });
-}
+GameState.prototype.handle = function(input, gametime) {}
 
-GameState.prototype.lose = function() {
-    return new LosingGameState();
-}
+GameState.prototype.status = function() {}
 
-GameState.prototype.win = function() {
-    return new WinningGameState();
-}
-
-GameState.prototype.status = function() {
-    return "Running...";
-}
-
-GameState.prototype.isRunning = function() {
-    return true;
-}

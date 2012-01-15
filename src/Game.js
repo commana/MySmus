@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-var Game = function(blobs, bounds, collision, state) {
+var Game = function(blobs, bounds, collision) {
     this.blobs     = blobs;
     this.bounds    = bounds;
     this.collision = collision;
-    this.state     = state;
 };
 
 Game.prototype.advance = function(input, gametime) {
-    if (!this.state.isRunning()) {
-        return this;
-    }
-    
     var blobs = input.process(this.blobs);
     
     var movedBlobs = [];
@@ -38,9 +33,6 @@ Game.prototype.advance = function(input, gametime) {
         return b.mass() > 0;
     });
     
-    return new Game(blobsAfterCollisions, this.bounds, this.collision, this.state.transition(blobsAfterCollisions));
+    return new Game(blobsAfterCollisions, this.bounds, this.collision);
 }
 
-Game.prototype.status = function() {
-    return this.state.status();
-}

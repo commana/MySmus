@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-var WinningGameState = function() {
-    GameState.call(this);
+var WinningGameState = function(game) {
+    GameState.call(this, game);
 }
 
 WinningGameState.prototype = new GameState();
 
-WinningGameState.prototype.transition = function(blobs) {
+WinningGameState.prototype.handle = function(input, gametime) {
     return this;
 }
 
@@ -28,6 +28,3 @@ WinningGameState.prototype.status = function() {
     return "Won!";
 }
 
-WinningGameState.prototype.isRunning = function() {
-    return false;
-}
